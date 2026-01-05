@@ -1,4 +1,4 @@
-# ❌⭕ Tic-Tac-Toe Terminal (PvP & Bot AI)
+# ❌⭕ C++ Tic-Tac-Toe Terminal (PvP & Bot AI)
 
 Game **Tic-Tac-Toe berbasis terminal (CLI)** yang dibuat sederhana namun menantang.  
 Mendukung **Player vs Player** dan **Player vs Bot** dengan **3 tingkat kesulitan AI**:  
@@ -34,3 +34,4 @@ Pilih tingkat kesulitan bot:
 ## 🛠️ Teknologi
 
 -C++
+-C
