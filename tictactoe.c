@@ -1,9 +1,31 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-char board[9] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+char board[9];
 char current_player = 'X';
+int mode = 1; // 1 = PVP, 2 = vs Bot
 
-void displayboard(){
+void resetboard() {
+    for (int i = 0; i < 9; i++) {
+        board[i] = '1' + i;
+    }
+    current_player = 'X';
+}
+
+void asciiart() {
+    printf("=================================\n");
+    printf ("████████╗██╗ ██████╗    ████████╗ █████╗  ██████╗    ████████╗ ██████╗ ███████╗\n");
+    printf ("╚══██╔══╝██║██╔════╝    ╚══██╔══╝██╔══██╗██╔════╝    ╚══██╔══╝██╔═══██╗██╔════╝\n");
+    printf ("   ██║   ██║██║            ██║   ███████║██║            ██║   ██║   ██║█████╗  \n");
+    printf ("   ██║   ██║██║            ██║   ██╔══██║██║            ██║   ██║   ██║██╔══╝  \n");
+    printf ("   ██║   ██║╚██████╗       ██║   ██║  ██║╚██████╗       ██║   ╚██████╔╝███████╗\n");
+    printf ("   ╚═╝   ╚═╝ ╚═════╝       ╚═╝   ╚═╝  ╚═╝ ╚═════╝       ╚═╝    ╚═════╝ ╚══════╝\n");                                                                           
+    printf("        TIC TAC TOE GAME         \n");
+    printf("=================================\n\n");
+}
+
+void displayboard() {
     printf("\n");
     printf(" %c | %c | %c \n", board[0], board[1], board[2]);
     printf("---+---+---\n");
@@ -13,68 +35,110 @@ void displayboard(){
     printf("\n");
 }
 
-void switchplayer(){
+void switchplayer() {
     current_player = (current_player == 'X') ? 'O' : 'X';
 }
 
-int checkwin(){
-    int wincondition[8][3] = {
-        {0, 1, 2}, {3, 4, 5}, {6, 7, 8}, // rows
-        {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, // columns
-        {0, 4, 8}, {2, 4, 6}             // diagonals
-
+int checkwin() {
+    int win[8][3] = {
+        {0,1,2},{3,4,5},{6,7,8},
+        {0,3,6},{1,4,7},{2,5,8},
+        {0,4,8},{2,4,6}
     };
+
     for (int i = 0; i < 8; i++) {
-        if (board[wincondition[i][0]] == current_player &&
-            board[wincondition[i][1]] == current_player &&
-            board[wincondition[i][2]] == current_player) {
+        if (board[win[i][0]] == current_player &&
+            board[win[i][1]] == current_player &&
+            board[win[i][2]] == current_player)
             return 1;
-        }
     }
     return 0;
 }
 
-// jika seri 
-int checkdraw(){
+int checkdraw() {
     for (int i = 0; i < 9; i++) {
-        if (board[i] != 'X' && board[i] != 'O') {
+        if (board[i] != 'X' && board[i] != 'O')
             return 0;
-        }
     }
     return 1;
 }
 
-int main(){
+void bot_easy_move() {
     int choice;
-
-    printf("Tic Tac Toe Game\n");
-    printf("=== TIC TAC TOE (Player vs Player) ===\n");
     while (1) {
-        displayboard();
-        printf("Player %c, pilih angka (1-9): ", current_player);
-        scanf("%d", &choice);
-        
-        if (choice < 1 || choice > 9 ||
-            board[choice - 1] == 'X' || board[choice - 1] == 'O') {
-            printf("Pilihan tidak valid. Coba lagi kawan~.\n");
-            continue;
-        }
-
-        board[choice - 1] = current_player;
-
-        if (checkwin()) {
-            displayboard();
-            printf("Player %c menang!\n", current_player);
+        choice = rand() % 9;
+        if (board[choice] != 'X' && board[choice] != 'O') {
+            board[choice] = 'O';
             break;
         }
-
-        if (checkdraw()) {
-            displayboard();
-            printf("Permainan seri!\n");
-            break;
-        }
-
-        switchplayer();
     }
+}
+
+int main() {
+    int choice;
+    char playagain;
+
+    srand(time(NULL));
+    resetboard();
+
+    system("clear");
+    asciiart();
+
+    printf("Pilih Mode:\n");
+    printf("1. Player vs Player\n");
+    printf("2. Player vs Bot (Easy)\n");
+    printf("Pilihan: ");
+    scanf("%d", &mode);
+
+    do {
+        resetboard();
+
+        while (1) {
+            system("clear");
+            asciiart();
+            displayboard();
+
+            if (mode == 2 && current_player == 'O') {
+                printf("Bot sedang berpikir...\n");
+                bot_easy_move();
+            } else {
+                printf("Player %c, pilih angka (1-9): ", current_player);
+                scanf("%d", &choice);
+
+                if (choice < 1 || choice > 9 ||
+                    board[choice - 1] == 'X' || board[choice - 1] == 'O') {
+                    printf("Pilihan tidak valid!\n");
+                    getchar(); getchar();
+                    continue;
+                }
+
+                board[choice - 1] = current_player;
+            }
+
+            if (checkwin()) {
+                system("clear");
+                asciiart();
+                displayboard();
+                printf("Player %c MENANG! 🎉\n", current_player);
+                break;
+            }
+
+            if (checkdraw()) {
+                system("clear");
+                asciiart();
+                displayboard();
+                printf("Permainan SERI 🤝\n");
+                break;
+            }
+
+            switchplayer();
+        }
+
+        printf("\nMain lagi? (y/n): ");
+        scanf(" %c", &playagain);
+
+    } while (playagain == 'y' || playagain == 'Y');
+
+    printf("\nTerima kasih sudah bermain 💙\n");
     return 0;
 }
