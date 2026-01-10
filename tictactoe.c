@@ -5,7 +5,7 @@
 
 char board[9];
 char current_player = 'X';
-int mode = 1; // 1 = PVP, 2 = vs Bot Easy, 3 = vs Bot Hard
+int mode = 1;
 int player_x_wins = 0;
 int player_o_wins = 0;
 int draws = 0;
@@ -51,9 +51,9 @@ void display_scoreboard() {
     printf("╔════════════════════════════════════════╗\n");
     printf("║            SCOREBOARD                  ║\n");
     printf("╠════════════════════════════════════════╣\n");
-    printf("║ %-20s : %3d wins    ║\n", player_x_name, player_x_wins);
-    printf("║ %-20s : %3d wins    ║\n", player_o_name, player_o_wins);
-    printf("║ Draws                  : %3d        ║\n", draws);
+    printf("║ %-20s : %3d wins                       ║\n", player_x_name, player_x_wins);
+    printf("║ %-20s : %3d wins                       ║\n", player_o_name, player_o_wins);
+    printf("║ Draws : %3d                            ║\n", draws);
     printf("╚════════════════════════════════════════╝\n\n");
 }
 
@@ -279,7 +279,7 @@ int main() {
                 } else {
                     bot_hard_move();
                 }
-                move_history[move_count++] = -1; // Bot move marker
+                move_history[move_count++] = -1; 
             } else {
                 printf("\n%s (%c), giliran Anda!\n", 
                        (current_player == 'X') ? player_x_name : player_o_name, 
@@ -289,7 +289,7 @@ int main() {
 
                 if (input[0] == 'h' || input[0] == 'H') {
                     show_hint();
-                    printf("\nTekan Enter untuk lanjut...");
+                    printf("\nTekan Enter untuk lanjut kawan...");
                     getchar(); getchar();
                     continue;
                 }
@@ -355,8 +355,8 @@ int main() {
     } while (playagain == 'y' || playagain == 'Y');
 
     printf("\n╔════════════════════════════════════════╗\n");
-    printf("║      TERIMA KASIH SUDAH BERMAIN! 💙    ║\n");
-    printf("╚════════════════════════════════════════╝\n");
+    printf("  ║      TERIMA KASIH SUDAH BERMAIN! 💙    ║\n");
+    printf("  ╚════════════════════════════════════════╝\n");
     printf("\nFinal Score:\n");
     display_scoreboard();
     
